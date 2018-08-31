@@ -55,7 +55,7 @@ func buildError(err gerrors.Error) (int, gerrors.Error) {
 
 func chooseCorrectCode(oldCode int, newCode int) int {
 	if newCode == http.StatusUnauthorized || oldCode == http.StatusUnauthorized {
-		return http.StatusForbidden
+		return http.StatusUnauthorized
 	} else if newCode == http.StatusForbidden || oldCode == http.StatusForbidden {
 		return http.StatusForbidden
 	} else if newCode > oldCode {
