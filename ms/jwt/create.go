@@ -10,11 +10,10 @@ import (
 func CreateToken(
 	content interface{},
 	secret string,
-	signedMethod jwt.SigningMethod,
 	days int) (string, error) {
 
 	json := toJSON(content)
-	token := jwt.NewWithClaims(signedMethod, jwt.MapClaims{
+	token := jwt.NewWithClaims(jwt.SigningMethodHS512, jwt.MapClaims{
 		contentId: json,
 		timeoutId: time.Now().AddDate(0, 0, days).Unix(),
 	})
