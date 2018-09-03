@@ -8,7 +8,7 @@ import (
 )
 
 type Action func(*Context) (interface{}, gerrors.Errors)
-type SecurityAction func(string, *Context) bool
+type SecurityAction func(string, *Context) error
 
 type Context struct {
 	RequestId      string
@@ -48,6 +48,11 @@ func (context Context) Info(info interface{}) *Context {
 	return &context
 }
 
+func (context Context) Error(err error) *Context {
+	logs.Instance().Error(logs.Error{context.logHeader, err})
+	return &context
+}
+
 func (context Context) SecurityAction(securityAction SecurityAction) *Context {
 	context.securityAction = securityAction
 	return &context
@@ -62,13 +67,13 @@ func (context Context) Run() {
 	err := executeSecurityAction(&context)
 
 	var value interface{}
-	if err == nil && context.action != nil {
-		value, err = context.action(&context)
-		if err != nil {
-			logs.Instance().Error(logs.Error{context.logHeader, err})
-		}
+	if err != nil {
+		value, err = executeAction(&context)
 	}
 
+	if err != nil {
+		context.Error(err)
+	}
 	ToJSON(context.Context, value, err)
 }
 
@@ -76,12 +81,18 @@ func executeSecurityAction(context *Context) error {
 	if context.securityAction != nil {
 		token, err := jwt.TokenFromHeader(context.Context)
 		if err != nil {
-			return gerrors.Forbidden()
+			context.Error(err)
 		}
 
-		if !context.securityAction(token, context) {
-			return gerrors.Forbidden()
-		}
+		return context.securityAction(token, context)
 	}
 	return nil
+}
+
+func executeAction(context *Context) (interface{}, error) {
+	if context.action != nil {
+		return context.action(context)
+	}
+
+	return nil, nil
 }
