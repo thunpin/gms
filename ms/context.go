@@ -79,11 +79,7 @@ func (context Context) Run() {
 
 func executeSecurityAction(context *Context) error {
 	if context.securityAction != nil {
-		token, err := jwt.TokenFromHeader(context.Context)
-		if err != nil {
-			context.Error(err)
-		}
-
+		token := jwt.TokenFromHeader(context.Context)
 		return context.securityAction(token, context)
 	}
 	return nil
