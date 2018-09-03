@@ -67,7 +67,7 @@ func (context Context) Run() {
 	err := executeSecurityAction(&context)
 
 	var value interface{}
-	if err != nil {
+	if err == nil {
 		value, err = executeAction(&context)
 	}
 
