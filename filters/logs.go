@@ -7,7 +7,7 @@ import (
 
 func LogAll(tag string) gms.Action {
 	return func(context *gms.Context, chain *gms.Chain) (interface{}, error) {
-		logIn(tag, context)
+		//logIn(tag, context)
 		result, err := chain.Next(context)
 		logOut(tag, context, result, err)
 		return result, err
