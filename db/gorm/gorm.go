@@ -33,3 +33,7 @@ func Close() {
 		db = nil
 	}
 }
+
+func DB() *gorm.DB {
+	return db
+}
