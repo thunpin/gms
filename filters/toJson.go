@@ -1,9 +1,10 @@
-package ms
+package filters
 
 import (
 	"net/http"
 
 	"github.com/thunpin/gerrors"
+	"github.com/thunpin/gms"
 )
 
 type APIResult struct {
@@ -12,7 +13,15 @@ type APIResult struct {
 	Errors []gerrors.Error
 }
 
-func BuildAPIResult(result interface{}, errs gerrors.Errors) *APIResult {
+var ToJSON = func(context *gms.Context, chain *gms.Chain) (interface{}, error) {
+	result, err := chain.Next(context)
+	apiResult := buildAPIResult(result, err)
+	context.JSON(apiResult.Code, apiResult)
+	return result, err
+}
+
+func buildAPIResult(result interface{}, err error) *APIResult {
+	errs := gerrors.New(err)
 	if hasErrors(errs) {
 		return buildAPIResultError(errs)
 	} else {

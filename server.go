@@ -1,4 +1,4 @@
-package ms
+package gms
 
 import (
 	"log"
@@ -11,8 +11,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/thunpin/gerrors"
 )
-
-const RequestIdHeader = "X-RequestID"
 
 func ToJSON(context *gin.Context, value interface{}, err error) {
 	result := BuildAPIResult(value, gerrors.New(err))

@@ -1,4 +1,4 @@
-package ms
+package gms
 
 import (
 	"fmt"
@@ -7,6 +7,8 @@ import (
 
 	"github.com/oklog/ulid"
 )
+
+const RequestIdHeader = "X-RequestID"
 
 func NewUUID() string {
 	t := time.Unix(1000000, 0)
