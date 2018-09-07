@@ -7,15 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
-
-	"github.com/gin-gonic/gin"
-	"github.com/thunpin/gerrors"
 )
-
-func ToJSON(context *gin.Context, value interface{}, err error) {
-	result := BuildAPIResult(value, gerrors.New(err))
-	context.JSON(result.Code, result)
-}
 
 func WaitStop(cError chan error, callback func(int)) {
 	cSignal := make(chan os.Signal, 1)
