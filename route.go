@@ -41,11 +41,11 @@ type Chain struct {
 	next   *Chain
 }
 
-func (chain Chain) Next(context *Context) (interface{}, error) {
+func (chain *Chain) Next(context *Context) (interface{}, error) {
 	return chain.next.action(context, chain.next)
 }
 
-func (chain Chain) add(action Action) *Chain {
+func (chain *Chain) add(action Action) *Chain {
 	if chain.next != nil {
 		return chain.next.add(action)
 	} else {
