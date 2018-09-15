@@ -5,7 +5,7 @@ import (
 	"github.com/thunpin/gms/logs"
 )
 
-func Log(tag string) gms.Action {
+func Log(tag string) gms.Filter {
 	return func(context *gms.Context, chain *gms.Chain) (interface{}, error) {
 		result, err := chain.Next(context)
 		logOut(tag, context, result, err)
