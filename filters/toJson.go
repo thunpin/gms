@@ -21,9 +21,9 @@ var ToJSON = func(context *gms.Context, chain *gms.Chain) (interface{}, error) {
 }
 
 func buildAPIResult(result interface{}, err error) *APIResult {
-	errs := gerrors.New(err).(gerrors.Errors)
-	if errs != nil && hasErrors(errs) {
-		return buildAPIResultError(errs)
+	errs := gerrors.New(err)
+	if errs != nil && hasErrors(errs.(gerrors.Errors)) {
+		return buildAPIResultError(errs.(gerrors.Errors))
 	} else {
 		return &APIResult{http.StatusOK, result, nil}
 	}
